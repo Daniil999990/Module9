@@ -1,28 +1,35 @@
-class MyQueue<A> {
-    private Node front;
-    private Node rear;
+class MyQueue<T> {
+    private T[] data;
+    private int head;
+    private int tail;
     private int size;
 
     public MyQueue() {
-        front = null;
-        rear = null;
-        size = 0;
+        this.data = (T[]) new Object[10];
+        this.head = 0;
+        this.tail = 0;
+        this.size = 0;
     }
 
-    public void add(A value) {
-        Node newNode = new Node(value);
-        if (size == 0) {
-            front = newNode;
-        } else {
-            rear.next = newNode;
+    public void add(T value) {
+        if (size == data.length) {
+            T[] newData = (T[]) new Object[data.length * 2];
+            for (int i = 0; i < size; i++) {
+                newData[i] = data[(head + i) % data.length];
+            }
+            data = newData;
+            head = 0;
+            tail = size;
         }
-        rear = newNode;
+        data[tail] = value;
+        tail = (tail + 1) % data.length;
         size++;
     }
 
     public void clear() {
-        front = null;
-        rear = null;
+        data = (T[]) new Object[10];
+        head = 0;
+        tail = 0;
         size = 0;
     }
 
@@ -30,33 +37,20 @@ class MyQueue<A> {
         return size;
     }
 
-    public Object peek() {
+    public T peek() {
         if (size == 0) {
             return null;
         }
-        return front.value;
+        return data[head];
     }
 
-    public Object poll() {
+    public T poll() {
         if (size == 0) {
             return null;
         }
-        Object value = front.value;
-        front = front.next;
+        T value = data[head];
+        head = (head + 1) % data.length;
         size--;
-        if (size == 0) {
-            rear = null;
-        }
         return value;
-    }
-
-    private static class Node<E> {
-        Object value;
-        Node next;
-
-        Node(E value) {
-            this.value = value;
-            this.next = null;
-        }
     }
 }
