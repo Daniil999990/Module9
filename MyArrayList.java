@@ -1,4 +1,4 @@
-class MyArrayList<A, T> {
+class MyArrayList<A> {
     private Object[] array;
     private int size;
     public MyArrayList() {
@@ -32,10 +32,10 @@ class MyArrayList<A, T> {
     public int size() {
         return this.size;
     }
-    public T get(int index) {
+    public Object get(int index) {
         if (index < 0 || index >= this.size) {
             throw new IndexOutOfBoundsException();
         }
-        return (T) this.array[index];
+        return  this.array[index];
     }
 }
