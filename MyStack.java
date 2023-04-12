@@ -1,65 +1,47 @@
-public class MyStack<B> {
-    private Node top;
+public class MyStack<A> {
+    private A[] head;
     private int size;
-
-    private class Node<A> {
-        Object data;
-        Node next;
-
-        public Node(A data) {
-            this.data = data;
-        }
+    public MyStack(int capacity) {
+        head = (A[]) new Object[capacity];
+        size = -1;
     }
 
-    public void push(B value) {
-        Node newNode = new Node(value);
-        newNode.next = top;
-        top = newNode;
+    public void push(A value) {
+        if (size == head.length - 1) {
+            throw new IllegalStateException("Stack overflow");
+        }
         size++;
+        head[size] = value;
     }
 
-    public Object pop() {
-        if (top == null) {
-            return null;
+    public A pop() {
+        if (isEmpty()) {
+            throw new NullPointerException("Stack underflow");
         }
-        Object value = top.data;
-        top = top.next;
+        A poppedElement = head[size];
+        head[size] = null;
         size--;
-        return value;
+        return poppedElement;
     }
 
-    public Object peek() {
-        if (top == null) {
-            return null;
+    public A peek() {
+        if (isEmpty()) {
+            throw new NullPointerException("Stack is empty");
         }
-        return top.data;
+        return head[size];
+    }
+
+    public boolean isEmpty() {
+        return size == -1;
     }
 
     public int size() {
-        return size;
+        return size + 1;
     }
 
     public void clear() {
-        top = null;
-        size = 0;
-    }
-
-    public void remove(int index) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException();
+        while (!isEmpty()) {
+            pop();
         }
-        if (index == 0) {
-            top = top.next;
-            size--;
-            return;
-        }
-        Node prev = top;
-        Node current = top.next;
-        for (int i = 1; i < index; i++) {
-            prev = current;
-            current = current.next;
-        }
-        prev.next = current.next;
-        size--;
     }
 }
